@@ -1,32 +1,14 @@
-import * as readline from 'readline';
-import * as fs from 'fs';
+import { fileToData, letterPriorityMap } from "./common";
 
 type Data = [Set<string>, Set<string>][];
 
-const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k','l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ] as const;
+const splitItemsToCompartments = (data: string[]): Data => {
+  return data.map(rucksack => {
+    const indexToSplit = rucksack.length/2;
+    const compartments: Data[number] = [new Set(rucksack.slice(0, indexToSplit)), new Set(rucksack.slice(indexToSplit))];
 
-const letterPriorityMap = letters.reduce<Record<string, number>>((acc, letter, index) => {
-  const basePriority = index + 1;
-  acc[letter] = basePriority;
-  acc[letter.toLocaleUpperCase()] = basePriority + letters.length;
-  return acc;
-}, {});
-
-const fileToData = async () => {
-  const rd = readline.createInterface({
-    input: fs.createReadStream(`${__dirname}/data.txt`),
-  });
-
-  const data: Data = [];
-
-  for await (const line of rd) {
-    const indexToSplit = line.length/2;
-    const compartments: Data[number] = [new Set(line.slice(0, indexToSplit)), new Set(line.slice(indexToSplit))];
-
-    data.push(compartments);
-  }
-
-  return data;
+    return compartments;
+  })
 }
 
 const getSharedItems = (data: Data[number]) => {
@@ -41,8 +23,9 @@ const getSharedItems = (data: Data[number]) => {
 
 const main = async () => {
   const data = await fileToData();
+  const splitedItems = splitItemsToCompartments(data);
 
-  const shared = data.map(getSharedItems)
+  const shared = splitedItems.map(getSharedItems)
 
   const priorities = shared.map(letter => letterPriorityMap[letter] || 0);
 
