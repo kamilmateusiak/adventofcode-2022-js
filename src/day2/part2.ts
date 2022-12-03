@@ -1,7 +1,11 @@
-var fs = require('fs'),
-    readline = require('readline');
+import * as fs from 'fs';
+import * as readline from 'readline';
 
-const translationMap = {
+type Choice = 'A' | 'B' | 'C';
+type Result = 'X' | 'Y' | 'Z';
+type TranslationMap = Record<`${Result}${Choice}`, Choice>
+
+const translationMap: TranslationMap = {
   'YA': 'A',
   'YB': 'B',
   'YC': 'C',
@@ -11,27 +15,26 @@ const translationMap = {
   'ZB': 'C',
   'ZC': 'A',
   'XC': 'B'
-}
+} as const;
 
-const translateResultToMyChoice = (result, opponentChoice) => {
+const translateResultToMyChoice = (result: Result, opponentChoice: Choice) => {
   return translationMap[`${result}${opponentChoice}`]
 }
 
-const lineToObject = (line) => {
+const lineToObject = (line: string) => {
   const [opponent, result] = line.split(' ');
 
-  const me = translateResultToMyChoice(result, opponent)
+  const me = translateResultToMyChoice(result as Result, opponent as Choice)
 
   return {
     me,
-    result
+    result: result as Result
   }
 }
 
 const fileToData = async () => {
   const rd = readline.createInterface({
-    input: fs.createReadStream('./data.txt'),
-    console: false
+    input: fs.createReadStream(`${__dirname}/data.txt`),
   });
 
   const data = [];
@@ -43,7 +46,7 @@ const fileToData = async () => {
   return data;
 }
 
-const getPointsForChoice = (choice) => {
+const getPointsForChoice = (choice: Choice) => {
   switch(choice) {
     case 'A':
       return 1;
@@ -56,7 +59,7 @@ const getPointsForChoice = (choice) => {
   }
 }
 
-const getPointsForOutcome = (result) => {
+const getPointsForOutcome = (result: Result) => {
   switch(result) {
     case 'Z':
       return 6;
@@ -67,7 +70,7 @@ const getPointsForOutcome = (result) => {
   }
 }
 
-const calculateRoundPoints = (round) => {
+const calculateRoundPoints = (round: { me: Choice, result: Result }) => {
   const choicePoints = getPointsForChoice(round.me);
   const outcomePoints = getPointsForOutcome(round.result)
 
@@ -77,11 +80,9 @@ const calculateRoundPoints = (round) => {
 const main = async () => {
   const data = await fileToData();
 
-  console.log(data.map((round) => calculateRoundPoints(round)));
-
   const myPointsSum = data.reduce((acc, round) => acc + calculateRoundPoints(round), 0);
 
-  console.log(myPointsSum)
+  return myPointsSum;
 }
 
-main()
+export default main;
