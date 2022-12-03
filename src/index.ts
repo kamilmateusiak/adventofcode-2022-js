@@ -16,7 +16,7 @@ const main = async () => {
 
   const result = await solution();
 
-  console.log(`Result is ${result}.`);
+  console.log(`Result is: ${result}`);
 }
 
 main()
