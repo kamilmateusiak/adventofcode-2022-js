@@ -12,7 +12,7 @@ export const letterPriorityMap = letters.reduce<Record<string, number>>((acc, le
 
 export const fileToData = async () => {
   const rd = readline.createInterface({
-    input: fs.createReadStream(`${__dirname}/data.txt`),
+    input: fs.createReadStream('data/day3.txt'),
   });
 
   const data: string[] = [];

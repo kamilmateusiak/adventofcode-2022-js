@@ -2,8 +2,14 @@
 
 My solutions for challenges published on https://adventofcode.com/2022.
 
-To run solution for a specific run:
+To run the projects on you machine use following commands:
 
+- build project
 ```cmd
-yarn start -d <day> -p <part>
+yarn build
+```
+
+- run solution for a specific challenge
+```cmd
+yarn start --day <day> --part <part>
 ```

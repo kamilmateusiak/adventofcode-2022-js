@@ -3,7 +3,7 @@ import * as fs from 'fs';
 
 export const fileToData = async () => {
   const rd = readline.createInterface({
-    input: fs.createReadStream(`${__dirname}/data.txt`),
+    input: fs.createReadStream(`data/day1.txt`),
   });
 
   const data: string[][] = [];

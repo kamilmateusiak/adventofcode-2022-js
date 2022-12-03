@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "noEmit": true,
     "target": "es6",
     "module": "commonjs",
     "strict": true,
+    "outDir": "lib",
+    "rootDir": "src",
   },
   "include": ["src"]
 }

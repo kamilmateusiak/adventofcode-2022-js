@@ -15,7 +15,7 @@ const lineToObject = (line: string) => {
 
 const fileToData = async () => {
   const rd = readline.createInterface({
-    input: fs.createReadStream(`${__dirname}/data.txt`),
+    input: fs.createReadStream('data/day2.txt'),
   });
 
   const data = [];
